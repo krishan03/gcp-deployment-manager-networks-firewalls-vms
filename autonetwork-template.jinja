@@ -1,0 +1,33 @@
+resources:
+- name: {{env["name"]}}
+  type: compute.v1.network
+  properties:
+    autoCreateSubnetworks: true
+	
+This base template is a great starting point for any GCP resource. The name field allows you to name the resource, and the type field allows you to specify the GCP resource that you want to create. You can also define properties, but these are optional for some resources.
+By definition, an auto-mode network automatically creates a subnetwork in each region. Therefore, you are setting autoCreateSubnetworks to true.
+These properties define:
+
+ipCidrRange: IP address range of the subnet
+network: Name of the subnet's network
+region: Region that the subnet is created in
+In this template, you are declaring arbitrary template properties instead of hard-coding specific IP ranges, networks, and regions. When you use the template, you will provide values for these properties in the top-level configuration.
+These properties define:
+
+network: Network that the firewall rule applies to
+sourceRange: Source IP ranges that traffic is allowed from
+IPProtocol: Specific protocol that the rule applies to
+ports: Specific ports of that protocol
+The allow property specifies that when traffic matches these parameters, traffic is allowed. You are setting the sourceRanges property to 0.0.0.0/0 to allow ingress from any IP source address. All other properties are defined as template properties, which you will provide values for from the top-level configuration.
+
+These properties define:
+
+machineType: Machine type and zone
+zone: Instance zone
+networkInterfaces: Network and subnetwork that VM is attached to
+accessConfigs: Required to give the instance a public IP address
+disks: The boot disk and its name and image
+Again, most properties are defined as template properties, which you will provide values for from the top-level configuration.
+
+Because these firewall rules depend on their network, you are using the $(ref.mynetwork.selfLink) reference to instruct Deployment Manager to resolve these resources in a dependent order. Specifically, the network is created before the firewall rules. By default, Deployment Manager creates all resources in parallel, so there is no guarantee that dependent resources are created in the correct order, unless you use references.
+
