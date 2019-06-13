@@ -6,70 +6,70 @@ imports:
 - path: instance-template.jinja
 
 resources:
-- name: network-1
+- name: network1
   type: autonetwork-template.jinja
 
-- name: network-1-allow-http-ssh-rdp
+- name: network1-allow-http-ssh-rdp
   type: firewall-template.jinja
   properties:
-    network: $(ref.network-1.selfLink)
+    network: $(ref.network1.selfLink)
     IPProtocol: TCP
     Port: [22, 80, 3389]
 
-- name: network-1-allow-icmp
+- name: network1-allow-icmp
   type: firewall-template.jinja
   properties:
-    network: $(ref.network-1.selfLink)
+    network: $(ref.network1.selfLink)
     IPProtocol: ICMP
     Port: []
 
-- name: network-2
+- name: network2
   type: customnetwork-template.jinja
 
-- name: network-2-subnet-us
+- name: network2-subnet-us
   type: subnetwork-template.jinja
   properties:
     ipCidrRange: 10.130.0.0/20
-    network: $(ref.network-2.selfLink)
+    network: $(ref.network2.selfLink)
     region: us-central1
 
-- name: network-2-allow-http-ssh-rdp
+- name: network2-allow-http-ssh-rdp
   type: firewall-template.jinja
   properties:
-    network: $(ref.network-2.selfLink)
+    network: $(ref.network2.selfLink)
     IPProtocol: TCP
     Port: [22, 80, 3389]
 
-- name: network-2-allow-icmp
+- name: network2-allow-icmp
   type: firewall-template.jinja
   properties:
-    network: $(ref.network-2.selfLink)
+    network: $(ref.network2.selfLink)
     IPProtocol: ICMP
     Port: []
 
-- name: network-1-us-vm
+- name: network1-us-vm
   type: instance-template.jinja
   properties:
     zone: us-central1-a
     machineType: n1-standard-1
-    network: $(ref.network-1.selfLink)
-    subnetwork: regions/us-central1/subnetworks/network-1
+    network: $(ref.network1.selfLink)
+    subnetwork: regions/us-central1/subnetworks/network1
 
-- name: network-1-eu-vm
+- name: network1-eu-vm
   type: instance-template.jinja
   properties:
     zone: europe-west1-d
     machineType: n1-standard-1
-    network: $(ref.network-1.selfLink)  
-    subnetwork: regions/europe-west1/subnetworks/network-1
+    network: $(ref.network1.selfLink)  
+    subnetwork: regions/europe-west1/subnetworks/network1
 
 
-- name: network-2-us-vm
+- name: network2-us-vm
   type: instance-template.jinja
   properties:
     zone: us-central1-a
     machineType: n1-standard-1
-    network: $(ref.network-2.selfLink)
-    subnetwork: $(ref.network-2-subnet-us.selfLink)
+    network: $(ref.network2.selfLink)
+    subnetwork: $(ref.network2-subnet-us.selfLink)
 
 
